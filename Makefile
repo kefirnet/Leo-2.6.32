@@ -2,7 +2,7 @@ VERSION = 2
 PATCHLEVEL = 6
 SUBLEVEL = 32
 EXTRAVERSION = .39
-NAME = Man-Eating Seals of Antiquity Test
+NAME = Man-Eating Seals of Antiquity
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
