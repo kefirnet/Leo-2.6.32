@@ -1,0 +1,15 @@
+--- drivers/cpufreq/Kconfig
++++ drivers/cpufreq/Kconfig
+@@ -120,6 +120,12 @@
+ 	  loading your cpufreq low-level hardware driver, using the
+ 	  'interactive' governor for latency-sensitive workloads.
+ 
++config CPU_FREQ_DEFAULT_GOV_SMARTASS2
++	bool "smartass2"
++	select CPU_FREQ_GOV_SMARTASS2
++	help
++		Use the CPUFreq governor 'smartassV2' as default.
++
+ endchoice
+ 
+ config CPU_FREQ_GOV_PERFORMANCE

@@ -1,0 +1,24 @@
+--- drivers/usb/host/ehci-hcd.c
++++ drivers/usb/host/ehci-hcd.c
+@@ -554,11 +564,20 @@
+ 	ehci->periodic_size = DEFAULT_I_TDPS;
+ 	INIT_LIST_HEAD(&ehci->cached_itd_list);
+ 	INIT_LIST_HEAD(&ehci->cached_sitd_list);
++
++	if (HCC_PGM_FRAMELISTLEN(hcc_params)) {
++		/* periodic schedule size can be smaller than default */
++		switch (EHCI_TUNE_FLS) {
++		case 0: ehci->periodic_size = 1024; break;
++		case 1: ehci->periodic_size = 512; break;
++		case 2: ehci->periodic_size = 256; break;
++		default:	BUG();
++		}
++	}
+ 	if ((retval = ehci_mem_init(ehci, GFP_KERNEL)) < 0)
+ 		return retval;
+ 
+ 	/* controllers may cache some of the periodic schedule ... */
+-	hcc_params = ehci_readl(ehci, &ehci->caps->hcc_params);
+ 	if (HCC_ISOC_CACHE(hcc_params))		// full frame cache
+ 		ehci->i_thresh = 8;
+ 	else					// N microframes cached

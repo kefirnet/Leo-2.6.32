@@ -1,0 +1,19 @@
+--- drivers/usb/serial/ftdi_sio.c
++++ drivers/usb/serial/ftdi_sio.c
+@@ -625,6 +630,7 @@
+ 	{ USB_DEVICE(FTDI_VID, FTDI_OCEANIC_PID) },
+ 	{ USB_DEVICE(TTI_VID, TTI_QL355P_PID) },
+ 	{ USB_DEVICE(FTDI_VID, FTDI_RM_CANVIEW_PID) },
++	{ USB_DEVICE(ACTON_VID, ACTON_SPECTRAPRO_PID) },
+ 	{ USB_DEVICE(CONTEC_VID, CONTEC_COM1USBH_PID) },
+ 	{ USB_DEVICE(BANDB_VID, BANDB_USOTL4_PID) },
+ 	{ USB_DEVICE(BANDB_VID, BANDB_USTL4_PID) },
+@@ -820,6 +836,8 @@
+ 	{ USB_DEVICE(FTDI_VID, FTDI_DOTEC_PID) },
+ 	{ USB_DEVICE(QIHARDWARE_VID, MILKYMISTONE_JTAGSERIAL_PID),
+ 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
++	{ USB_DEVICE(ST_VID, ST_STMCLT1030_PID),
++		.driver_info = (kernel_ulong_t)&ftdi_stmclite_quirk },
+ 	{ },					/* Optional parameter entry */
+ 	{ }					/* Terminating entry */
+ };

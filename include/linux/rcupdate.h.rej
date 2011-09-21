@@ -1,0 +1,13 @@
+--- include/linux/rcupdate.h
++++ include/linux/rcupdate.h
+@@ -53,6 +44,10 @@
+ 
+ /* Internal to kernel */
+ extern void rcu_init(void);
++extern void rcu_scheduler_starting(void);
++extern int rcu_needs_cpu(int cpu);
++/* Internal to kernel, but needed by rcupreempt.h. */
++extern int rcu_scheduler_active;
+ 
+ #if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU)
+ #include <linux/rcutree.h>

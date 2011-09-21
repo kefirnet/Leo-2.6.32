@@ -1,0 +1,10 @@
+--- arch/arm/mach-msm/htc_battery.c
++++ arch/arm/mach-msm/htc_battery.c
+@@ -1695,7 +1684,6 @@
+ {
+ 	int rc = 0;
+ 	struct htc_battery_platform_data *pdata = pdev->dev.platform_data;
+-
+ 	pr_info("HTC Battery Probe\n");
+ 	htc_batt_info.device_id = pdev->id;
+ 	htc_batt_info.gpio_usb_id = pdata->gpio_usb_id;

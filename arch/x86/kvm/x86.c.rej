@@ -1,0 +1,64 @@
+--- arch/x86/kvm/x86.c
++++ arch/x86/kvm/x86.c
+@@ -483,48 +483,42 @@
+ 	MSR_IA32_MISC_ENABLE,
+ };
+ 
+-static void set_efer(struct kvm_vcpu *vcpu, u64 efer)
++static int set_efer(struct kvm_vcpu *vcpu, u64 efer)
+ {
+-	if (efer & efer_reserved_bits) {
+-		kvm_inject_gp(vcpu, 0);
+-		return;
+-	}
++	if (efer & efer_reserved_bits)
++		return 1;
+ 
+ 	if (is_paging(vcpu)
+-	    && (vcpu->arch.shadow_efer & EFER_LME) != (efer & EFER_LME)) {
+-		kvm_inject_gp(vcpu, 0);
+-		return;
+-	}
++	    && (vcpu->arch.shadow_efer & EFER_LME) != (efer & EFER_LME))
++		return 1;
+ 
+ 	if (efer & EFER_FFXSR) {
+ 		struct kvm_cpuid_entry2 *feat;
+ 
+ 		feat = kvm_find_cpuid_entry(vcpu, 0x80000001, 0);
+-		if (!feat || !(feat->edx & bit(X86_FEATURE_FXSR_OPT))) {
+-			kvm_inject_gp(vcpu, 0);
+-			return;
+-		}
++		if (!feat || !(feat->edx & bit(X86_FEATURE_FXSR_OPT)))
++			return 1;
+ 	}
+ 
+ 	if (efer & EFER_SVME) {
+ 		struct kvm_cpuid_entry2 *feat;
+ 
+ 		feat = kvm_find_cpuid_entry(vcpu, 0x80000001, 0);
+-		if (!feat || !(feat->ecx & bit(X86_FEATURE_SVM))) {
+-			kvm_inject_gp(vcpu, 0);
+-			return;
+-		}
++		if (!feat || !(feat->ecx & bit(X86_FEATURE_SVM)))
++			return 1;
+ 	}
+ 
+-	kvm_x86_ops->set_efer(vcpu, efer);
+-
+ 	efer &= ~EFER_LMA;
+ 	efer |= vcpu->arch.shadow_efer & EFER_LMA;
+ 
++	kvm_x86_ops->set_efer(vcpu, efer);
++
+ 	vcpu->arch.shadow_efer = efer;
+ 
+ 	vcpu->arch.mmu.base_role.nxe = (efer & EFER_NX) && !tdp_enabled;
+ 	kvm_mmu_reset_context(vcpu);
++
++	return 0;
+ }
+ 
+ void kvm_enable_efer_bits(u64 mask)

@@ -1,0 +1,35 @@
+--- drivers/usb/gadget/android.c
++++ drivers/usb/gadget/android.c
+@@ -501,21 +501,21 @@
+ 		f->hidden = disable;
+ 		product_id = get_product_id(dev);
+ 		device_desc.idProduct = __constant_cpu_to_le16(product_id);
+-		if (dev->cdev) {
++		if (dev->cdev)
+ 			dev->cdev->desc.idProduct = device_desc.idProduct;
+ 
+ #ifdef CONFIG_USB_ANDROID_RNDIS
+-			/* We need to specify the COMM class in the device descriptor
+-			* if we are using RNDIS.
+-			*/
+-			if (!strcmp(f->name, "ether")) {
+-				if (enable)
+-					dev->cdev->desc.bDeviceClass = USB_CLASS_COMM;
+-				else
+-					dev->cdev->desc.bDeviceClass = USB_CLASS_PER_INTERFACE;
+-			}
++		/* We need to specify the COMM class in the device descriptor
++		* if we are using RNDIS.
++		*/
++		if (!strcmp(f->name, "ether")) {
++			if (enable)
++				dev->cdev->desc.bDeviceClass = USB_CLASS_COMM;
++			else
++				dev->cdev->desc.bDeviceClass = USB_CLASS_PER_INTERFACE;
++		}
+ #endif
+-		}
++
+ #ifdef CONFIG_USB_GADGET_MSM_72K
+ 	msm_hsusb_request_reset();
+ #else

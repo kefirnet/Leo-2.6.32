@@ -1,0 +1,31 @@
+--- kernel/perf_event.c
++++ kernel/perf_event.c
+@@ -4608,19 +4612,19 @@
+ 	list_add_tail(&event->owner_entry, &current->perf_event_list);
+ 	mutex_unlock(&current->perf_event_mutex);
+ 
+-err_fput_free_put_context:
+-	fput_light(event_file, fput_needed2);
++	fput_light(group_file, fput_needed);
++	fd_install(event_fd, event_file);
++	return event_fd;
+ 
++err_fput_free_put_context:
++	fput(event_file);
+ err_free_put_context:
+-	if (err < 0)
+-		free_event(event);
+-
++	free_event(event);
+ err_put_context:
+-	if (err < 0)
+-		put_ctx(ctx);
+-
+ 	fput_light(group_file, fput_needed);
+-
++	put_ctx(ctx);
++err_fd:
++	put_unused_fd(event_fd);
+ 	return err;
+ }
+ 
