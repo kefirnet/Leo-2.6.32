@@ -109,7 +109,7 @@ static int read_symbol(FILE *in, struct sym_entry *s)
 	if (rc != 3) {
 		if (rc != EOF) {
 			/* skip line */
-			fgets(str, 500, in);
+			xfgets(str, 500, in);
 		}
 		return -1;
 	}
