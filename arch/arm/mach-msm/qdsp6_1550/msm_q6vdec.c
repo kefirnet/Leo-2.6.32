@@ -96,6 +96,8 @@ static void allow_sleep(void)
 }
 #define MAX_SUPPORTED_INSTANCES 2
 
+#define VDEC_MAX_SEQ_HEADER_SIZE 300
+
 enum {
 	VDEC_DALRPC_INITIALIZE = DAL_OP_FIRST_DEVICE_API,
 	VDEC_DALRPC_SETBUFFERS,
@@ -270,6 +272,9 @@ static int vdec_initialize(struct vdec_data *vd, void *argp)
 	vi_cfg.decode_done_evt = VDEC_ASYNCMSG_DECODE_DONE;
 	vi_cfg.reuse_frame_evt = VDEC_ASYNCMSG_REUSE_FRAME;
 	memcpy(&vi_cfg.cfg, &vdec_cfg_sps.cfg, sizeof(struct vdec_config));
+	
+	if (vdec_cfg_sps.seq.len > VDEC_MAX_SEQ_HEADER_SIZE)
+	  vdec_cfg_sps.seq.len = VDEC_MAX_SEQ_HEADER_SIZE;
 
 	header = kmalloc(vdec_cfg_sps.seq.len, GFP_KERNEL);
 	if (!header) {
