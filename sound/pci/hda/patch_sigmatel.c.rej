@@ -1,0 +1,11 @@
+--- sound/pci/hda/patch_sigmatel.c
++++ sound/pci/hda/patch_sigmatel.c
+@@ -1600,7 +1600,7 @@
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_DELL, 0x02fe,
+ 				"Dell Studio XPS 1645", STAC_DELL_M6_BOTH),
+ 	SND_PCI_QUIRK(PCI_VENDOR_ID_DELL, 0x0413,
+-				"Dell Studio 1558", STAC_DELL_M6_BOTH),
++				"Dell Studio 1558", STAC_DELL_M6_DMIC),
+ 	{} /* terminator */
+ };
+ 
