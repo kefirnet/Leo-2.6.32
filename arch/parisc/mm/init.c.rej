@@ -1,0 +1,14 @@
+--- arch/parisc/mm/init.c
++++ arch/parisc/mm/init.c
+@@ -265,10 +265,8 @@
+ 	}
+ 	memset(pfnnid_map, 0xff, sizeof(pfnnid_map));
+ 
+-	for (i = 0; i < npmem_ranges; i++) {
+-		node_set_state(i, N_NORMAL_MEMORY);
++	for (i = 0; i < npmem_ranges; i++)
+ 		node_set_online(i);
+-	}
+ #endif
+ 
+ 	/*

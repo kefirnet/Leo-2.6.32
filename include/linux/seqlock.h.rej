@@ -1,0 +1,17 @@
+--- include/linux/seqlock.h
++++ include/linux/seqlock.h
+@@ -88,12 +88,12 @@
+ 	unsigned ret;
+ 
+ repeat:
+-	ret = sl->sequence;
+-	smp_rmb();
++	ret = ACCESS_ONCE(sl->sequence);
+ 	if (unlikely(ret & 1)) {
+ 		cpu_relax();
+ 		goto repeat;
+ 	}
++	smp_rmb();
+ 
+ 	return ret;
+ }

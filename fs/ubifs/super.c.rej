@@ -1,0 +1,10 @@
+--- fs/ubifs/super.c
++++ fs/ubifs/super.c
+@@ -1550,6 +1550,7 @@
+ 		}
+ 		sup->leb_cnt = cpu_to_le32(c->leb_cnt);
+ 		err = ubifs_write_sb_node(c, sup);
++		kfree(sup);
+ 		if (err)
+ 			goto out;
+ 	}

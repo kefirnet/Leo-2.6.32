@@ -1,0 +1,12 @@
+--- arch/x86/kernel/pvclock.c
++++ arch/x86/kernel/pvclock.c
+@@ -74,8 +74,7 @@
+ static u64 pvclock_get_nsec_offset(struct pvclock_shadow_time *shadow)
+ {
+ 	u64 delta = native_read_tsc() - shadow->tsc_timestamp;
+-	return pvclock_scale_delta(delta, shadow->tsc_to_nsec_mul,
+-				   shadow->tsc_shift);
++	return scale_delta(delta, shadow->tsc_to_nsec_mul, shadow->tsc_shift);
+ }
+ 
+ /*

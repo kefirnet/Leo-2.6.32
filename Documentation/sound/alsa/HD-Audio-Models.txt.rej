@@ -1,0 +1,8 @@
+--- Documentation/sound/alsa/HD-Audio-Models.txt
++++ Documentation/sound/alsa/HD-Audio-Models.txt
+@@ -401,5 +401,4 @@
+ Cirrus Logic CS4206/4207
+ ========================
+   mbp55		MacBook Pro 5,5
+-  imac27	IMac 27 Inch
+   auto		BIOS setup (default)

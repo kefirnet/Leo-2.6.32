@@ -1,0 +1,11 @@
+--- arch/arm/kernel/sys_oabi-compat.c
++++ arch/arm/kernel/sys_oabi-compat.c
+@@ -311,7 +311,7 @@
+ 	long err;
+ 	int i;
+ 
+-	if (nsops < 1 || nsops > SEMOPM)
++	if (nsops < 1)
+ 		return -EINVAL;
+ 	sops = kmalloc(sizeof(*sops) * nsops, GFP_KERNEL);
+ 	if (!sops)

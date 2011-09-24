@@ -1,0 +1,10 @@
+--- arch/x86/kernel/cpu/mcheck/mce_amd.c
++++ arch/x86/kernel/cpu/mcheck/mce_amd.c
+@@ -468,6 +468,7 @@
+ out_free:
+ 	if (b) {
+ 		kobject_put(&b->kobj);
++		list_del(&b->miscj);
+ 		kfree(b);
+ 	}
+ 	return err;

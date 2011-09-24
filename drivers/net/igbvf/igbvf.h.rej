@@ -1,0 +1,10 @@
+--- drivers/net/igbvf/igbvf.h
++++ drivers/net/igbvf/igbvf.h
+@@ -125,6 +125,7 @@
+ 			unsigned int page_offset;
+ 		};
+ 	};
++	struct page *page;
+ };
+ 
+ union igbvf_desc {

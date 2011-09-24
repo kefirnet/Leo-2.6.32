@@ -1,0 +1,36 @@
+--- drivers/usb/core/hub.c
++++ drivers/usb/core/hub.c
+@@ -1424,11 +1424,11 @@
+ 					|| new_state == USB_STATE_SUSPENDED)
+ 				;	/* No change to wakeup settings */
+ 			else if (new_state == USB_STATE_CONFIGURED)
+-				device_set_wakeup_capable(&udev->dev,
++				device_init_wakeup(&udev->dev,
+ 					(udev->actconfig->desc.bmAttributes
+ 					 & USB_CONFIG_ATT_WAKEUP));
+ 			else
+-				device_set_wakeup_capable(&udev->dev, 0);
++				device_init_wakeup(&udev->dev, 0);
+ 		}
+ 		if (udev->state == USB_STATE_SUSPENDED &&
+ 			new_state != USB_STATE_SUSPENDED)
+@@ -1786,17 +1786,10 @@
+ {
+ 	int err;
+ 
+-	if (udev->parent) {
+-		/* Increment the parent's count of unsuspended children */
++	/* Increment the parent's count of unsuspended children */
++	if (udev->parent)
+ 		usb_autoresume_device(udev->parent);
+ 
+-		/* Initialize non-root-hub device wakeup to disabled;
+-		 * device (un)configuration controls wakeup capable
+-		 * sysfs power/wakeup controls wakeup enabled/disabled
+-		 */
+-		device_init_wakeup(&udev->dev, 0);
+-	}
+-
+ 	err = usb_enumerate_device(udev);	/* Read descriptors */
+ 	if (err < 0)
+ 		goto fail;

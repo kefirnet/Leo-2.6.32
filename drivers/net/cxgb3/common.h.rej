@@ -1,0 +1,17 @@
+--- drivers/net/cxgb3/common.h
++++ drivers/net/cxgb3/common.h
+@@ -125,9 +125,11 @@
+ 	IRQ_NUM_STATS		/* keep last */
+ };
+ 
+-#define TP_VERSION_MAJOR	1
+-#define TP_VERSION_MINOR	1
+-#define TP_VERSION_MICRO	0
++enum {
++	TP_VERSION_MAJOR	= 1,
++	TP_VERSION_MINOR	= 1,
++	TP_VERSION_MICRO	= 0
++};
+ 
+ #define S_TP_VERSION_MAJOR		16
+ #define M_TP_VERSION_MAJOR		0xFF

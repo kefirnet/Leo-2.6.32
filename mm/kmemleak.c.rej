@@ -1,0 +1,17 @@
+--- mm/kmemleak.c
++++ mm/kmemleak.c
+@@ -1354,9 +1354,12 @@
+ 	++(*pos);
+ 
+ 	list_for_each_continue_rcu(n, &object_list) {
+-		next_obj = list_entry(n, struct kmemleak_object, object_list);
+-		if (get_object(next_obj))
++		struct kmemleak_object *obj =
++			list_entry(n, struct kmemleak_object, object_list);
++		if (get_object(obj)) {
++			next_obj = obj;
+ 			break;
++		}
+ 	}
+ 
+ 	put_object(prev_obj);

@@ -1,0 +1,12 @@
+--- drivers/net/vmxnet3/vmxnet3_ethtool.c
++++ drivers/net/vmxnet3/vmxnet3_ethtool.c
+@@ -288,6 +288,9 @@
+ 		/* toggle the LRO feature*/
+ 		netdev->features ^= NETIF_F_LRO;
+ 
++		/* Update private LRO flag */
++		adapter->lro = lro_requested;
++
+ 		/* update harware LRO capability accordingly */
+ 		if (lro_requested)
+ 			adapter->shared->devRead.misc.uptFeatures &= UPT1_F_LRO;

@@ -1,0 +1,11 @@
+--- drivers/net/atl1c/atl1c_main.c
++++ drivers/net/atl1c/atl1c_main.c
+@@ -1976,6 +1976,8 @@
+ 		else {
+ 			use_tpd = atl1c_get_tpd(adapter, type);
+ 			memcpy(use_tpd, tpd, sizeof(struct atl1c_tpd_desc));
++			use_tpd = atl1c_get_tpd(adapter, type);
++			memcpy(use_tpd, tpd, sizeof(struct atl1c_tpd_desc));
+ 		}
+ 		buffer_info = atl1c_get_tx_buffer(adapter, use_tpd);
+ 		buffer_info->length = buf_len - mapped_len;

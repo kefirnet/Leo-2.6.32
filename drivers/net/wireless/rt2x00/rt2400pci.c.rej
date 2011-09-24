@@ -1,0 +1,18 @@
+--- drivers/net/wireless/rt2x00/rt2400pci.c
++++ drivers/net/wireless/rt2x00/rt2400pci.c
+@@ -1431,6 +1431,7 @@
+ 			       IEEE80211_HW_SIGNAL_DBM |
+ 			       IEEE80211_HW_SUPPORTS_PS |
+ 			       IEEE80211_HW_PS_NULLFUNC_STACK;
++	rt2x00dev->hw->extra_tx_headroom = 0;
+ 
+ 	SET_IEEE80211_DEV(rt2x00dev->hw, rt2x00dev->dev);
+ 	SET_IEEE80211_PERM_ADDR(rt2x00dev->hw,
+@@ -1627,7 +1628,6 @@
+ 	.eeprom_size	= EEPROM_SIZE,
+ 	.rf_size	= RF_SIZE,
+ 	.tx_queues	= NUM_TX_QUEUES,
+-	.extra_tx_headroom = 0,
+ 	.rx		= &rt2400pci_queue_rx,
+ 	.tx		= &rt2400pci_queue_tx,
+ 	.bcn		= &rt2400pci_queue_bcn,

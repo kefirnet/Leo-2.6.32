@@ -1,16 +1,24 @@
 --- kernel/trace/ftrace.c
 +++ kernel/trace/ftrace.c
-@@ -3320,12 +3363,7 @@
- 				GFP_KERNEL);
- 		if (!ret_stack)
- 			return;
--		atomic_set(&t->tracing_graph_pause, 0);
--		atomic_set(&t->trace_overrun, 0);
--		t->ftrace_timestamp = 0;
--		/* make curr_ret_stack visable before we add the ret_stack */
--		smp_wmb();
--		t->ret_stack = ret_stack;
-+		graph_init_task(t, ret_stack);
+@@ -2360,14 +2360,16 @@
+ 		ftrace_match_records(parser->buffer, parser->idx, enable);
  	}
- }
  
+-	mutex_lock(&ftrace_lock);
+-	if (ftrace_start_up && ftrace_enabled)
+-		ftrace_run_update_code(FTRACE_ENABLE_CALLS);
+-	mutex_unlock(&ftrace_lock);
+-
+ 	trace_parser_put(parser);
+ 	kfree(iter);
+ 
++	if (file->f_mode & FMODE_WRITE) {
++		mutex_lock(&ftrace_lock);
++		if (ftrace_start_up && ftrace_enabled)
++			ftrace_run_update_code(FTRACE_ENABLE_CALLS);
++		mutex_unlock(&ftrace_lock);
++	}
++
+ 	mutex_unlock(&ftrace_regex_lock);
+ 	return 0;
+ }

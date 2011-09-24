@@ -1,0 +1,13 @@
+--- drivers/net/bonding/bond_3ad.c
++++ drivers/net/bonding/bond_3ad.c
+@@ -2451,10 +2451,6 @@
+ 	if (!(dev->flags & IFF_MASTER))
+ 		goto out;
+ 
+-	skb = skb_share_check(skb, GFP_ATOMIC);
+-	if (!skb)
+-		goto out;
+-
+ 	if (!pskb_may_pull(skb, sizeof(struct lacpdu)))
+ 		goto out;
+ 

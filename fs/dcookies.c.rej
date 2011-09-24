@@ -1,0 +1,19 @@
+--- fs/dcookies.c
++++ fs/dcookies.c
+@@ -178,6 +178,8 @@
+ 	/* FIXME: (deleted) ? */
+ 	path = d_path(&dcs->path, kbuf, PAGE_SIZE);
+ 
++	mutex_unlock(&dcookie_mutex);
++
+ 	if (IS_ERR(path)) {
+ 		err = PTR_ERR(path);
+ 		goto out_free;
+@@ -194,6 +196,7 @@
+ 
+ out_free:
+ 	kfree(kbuf);
++	return err;
+ out:
+ 	mutex_unlock(&dcookie_mutex);
+ 	return err;

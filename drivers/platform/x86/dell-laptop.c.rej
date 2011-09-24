@@ -1,0 +1,28 @@
+--- drivers/platform/x86/dell-laptop.c
++++ drivers/platform/x86/dell-laptop.c
+@@ -71,19 +71,6 @@
+ 			DMI_MATCH(DMI_CHASSIS_TYPE, "8"),
+ 		},
+ 	},
+-	{
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
+-			DMI_MATCH(DMI_CHASSIS_TYPE, "9"), /*Laptop*/
+-		},
+-	},
+-	{
+-		.ident = "Dell Computer Corporation",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Dell Computer Corporation"),
+-			DMI_MATCH(DMI_CHASSIS_TYPE, "8"),
+-		},
+-	},
+ 	{ }
+ };
+ 
+@@ -410,5 +397,3 @@
+ MODULE_DESCRIPTION("Dell laptop driver");
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("dmi:*svnDellInc.:*:ct8:*");
+-MODULE_ALIAS("dmi:*svnDellInc.:*:ct9:*");
+-MODULE_ALIAS("dmi:*svnDellComputerCorporation.:*:ct8:*");

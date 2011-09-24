@@ -1,0 +1,11 @@
+--- fs/fat/file.c
++++ fs/fat/file.c
+@@ -101,7 +101,7 @@
+ 		if (attr & ATTR_SYS)
+ 			inode->i_flags |= S_IMMUTABLE;
+ 		else
+-			inode->i_flags &= S_IMMUTABLE;
++			inode->i_flags &= ~S_IMMUTABLE;
+ 	}
+ 
+ 	fat_save_attrs(inode, attr);

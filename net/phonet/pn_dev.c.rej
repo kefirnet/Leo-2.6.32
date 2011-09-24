@@ -1,0 +1,12 @@
+--- net/phonet/pn_dev.c
++++ net/phonet/pn_dev.c
+@@ -225,9 +225,6 @@
+ {
+ 	struct net_device *dev = arg;
+ 
+-	if (!net_eq(dev_net(dev), &init_net))
+-		return 0;
+-
+ 	switch (what) {
+ 	case NETDEV_REGISTER:
+ 		if (dev->type == ARPHRD_PHONET)

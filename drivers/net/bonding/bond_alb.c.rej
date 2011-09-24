@@ -1,0 +1,13 @@
+--- drivers/net/bonding/bond_alb.c
++++ drivers/net/bonding/bond_alb.c
+@@ -370,10 +370,6 @@
+ 		goto out;
+ 	}
+ 
+-	skb = skb_share_check(skb, GFP_ATOMIC);
+-	if (!skb)
+-		goto out;
+-
+ 	if (!pskb_may_pull(skb, arp_hdr_len(bond_dev)))
+ 		goto out;
+ 
