@@ -63,7 +63,6 @@ static const char driver_name[] = "msm72k_udc";
 
 #define SETUP_BUF_SIZE      4096
 
-typedef void (*completion_func)(struct usb_ep *ep, struct usb_request *req);
 
 static const char *const ep_name[] = {
 	"ep0out", "ep1out", "ep2out", "ep3out",
@@ -99,7 +98,9 @@ struct msm_request {
 	struct usb_request req;
 
 	/* saved copy of req.complete */
-        completion_func gadget_complete;
+	void	(*gadget_complete)(struct usb_ep *ep,
+					struct usb_request *req);
+
 
 	struct usb_info *ui;
 	struct msm_request *next;
@@ -609,7 +610,7 @@ static void ep0_complete(struct usb_ep *ep, struct usb_request *req)
 	struct usb_info *ui = ept->ui;
 
 	req->complete = r->gadget_complete;
-	r->gadget_complete = NULL;
+	r->gadget_complete = 0;
 	if	(req->complete)
 		req->complete(&ui->ep0in.ep, req);
 }
@@ -619,16 +620,8 @@ static void ep0_queue_ack_complete(struct usb_ep *ep,
 {
 	struct msm_request *r = to_msm_request(_req);
 	struct msm_endpoint *ept = to_msm_endpoint(ep);
-	
 	struct usb_info *ui = ept->ui;
 	struct usb_request *req = ui->setup_req;
-	
-	completion_func gadget_complete = r->gadget_complete;
-	
-	if (gadget_complete) {
-	  r->gadget_complete = NULL;
-	  gadget_complete(ep, req);
-	}
 
 	/* queue up the receive of the ACK response from the host */
 	if (_req->status == 0 && _req->actual == _req->length) {
@@ -702,7 +695,7 @@ static void ep0_setup_send(struct usb_info *ui, unsigned length)
 
 	req->length = length;
 	req->complete = ep0_queue_ack_complete;
-	r->gadget_complete = NULL;
+	r->gadget_complete = 0;
 	usb_ept_queue_xfer(ept, req);
 }
 
@@ -900,16 +893,14 @@ static void handle_endpoint(struct usb_info *ui, unsigned bit)
 		}
 		req->busy = 0;
 		req->live = 0;
+		if (req->dead)
+			do_free_req(ui, req);
 
 		if (req->req.complete) {
 			spin_unlock_irqrestore(&ui->lock, flags);
 			req->req.complete(&ept->ep, &req->req);
 			spin_lock_irqsave(&ui->lock, flags);
 		}
-
-		// nikantonelli 20110622: only free after you are done with it.
-		if (req->dead)
-			do_free_req(ui, req);
 	}
 	spin_unlock_irqrestore(&ui->lock, flags);
 }
@@ -984,8 +975,7 @@ static void flush_endpoint_sw(struct msm_endpoint *ept)
 		}
 		if (req->dead)
 			do_free_req(ui, req);
-		else
-		  req = req->next;
+		req = req->next;
 	}
 	spin_unlock_irqrestore(&ui->lock, flags);
 }
@@ -1156,12 +1146,12 @@ static ssize_t store_usb_serial_number(struct device *dev,
 	struct device_attribute *attr, const char *buf, size_t count)
 {
 	struct msm_hsusb_platform_data *pdata = dev->platform_data;
-	char *serialno = "000000000000";
 
 	if (buf[0] == '0' || buf[0] == '1') {
 		memset(mfg_df_serialno, 0x0, sizeof(mfg_df_serialno));
 		if (buf[0] == '0') {
-			strncpy(mfg_df_serialno, serialno, strlen(serialno));
+			strncpy(mfg_df_serialno, "000000000000",
+				strlen("000000000000"));
 			use_mfg_serialno = 1;
 			android_set_serialno(mfg_df_serialno);
 		} else {
@@ -2355,7 +2345,6 @@ static int msm72k_probe(struct platform_device *pdev)
 	struct usb_info *ui;
 	int irq;
 	int ret;
-	char *serialno = "000000000000";
 
 	INFO("msm72k_probe\n");
 	ui = kzalloc(sizeof(struct usb_info), GFP_KERNEL);
@@ -2467,7 +2456,7 @@ static int msm72k_probe(struct platform_device *pdev)
 		use_mfg_serialno = 1;
 	else
 		use_mfg_serialno = 0;
-	strncpy(mfg_df_serialno, serialno, strlen(serialno));
+	strncpy(mfg_df_serialno, "000000000000", strlen("000000000000"));
 
 	return 0;
 }
